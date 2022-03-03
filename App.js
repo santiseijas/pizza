@@ -2,12 +2,12 @@ import * as React from "react";
 import { View, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Home from "./screens/Home";
+import Home from "./src/screens/Home";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
-import { personaReducer } from "./redux/reducer";
-import Master from "./screens/Master";
-import Detail from "./screens/Detail";
+import { personaReducer } from "./src/redux/reducer";
+import Master from "./src/screens/Master";
+import Detail from "./src/screens/Detail";
 
 const Stack = createNativeStackNavigator();
 const store = createStore(personaReducer);
@@ -22,10 +22,15 @@ export default function App() {
             component={Home}
             options={{ headerTitle: "" }}
           />
-            <Stack.Screen
+          <Stack.Screen
             name="Master"
             component={Master}
-            options={{ headerTitle: "" ,headerBackVisible:false}}
+            options={{
+              headerTitle: "",
+              headerShadowVisible: false,
+              headerBackTitleVisible: false,
+              headerBackVisible: false
+            }}
           />
           <Stack.Screen
             name="Detail"
