@@ -1,10 +1,10 @@
 import React from "react";
-import { StyleSheet, Text, View, Modal } from "react-native";
+import { StyleSheet, Text, View, Modal, Image } from "react-native";
 import Button from "./Button";
 
 const CustomModal = (props) => {
 
-   
+
    return props.display ? (
       <View>
          <Modal
@@ -18,9 +18,12 @@ const CustomModal = (props) => {
                   <Text style={styles.textStyle}>
                      Do you want to see one film tonight?
             </Text>
+                  <View>
+                     <Image source={{ uri: 'https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_FMjpg_UY720_.jpg' }} style={styles.filmImg} />
+                  </View>
                   <View style={styles.bottom}>
                      <Button
-                        name={"Buy"}
+                        name={"Add"}
                         style={styles.buttonModal}
                         styleText={{ color: "white", fontSize: 20 }}
                         onPress={props.closeModal}
@@ -46,7 +49,7 @@ const styles = StyleSheet.create({
       backgroundColor: "white",
       borderRadius: 20,
       padding: 35,
-      height: 300,
+      height: 350,
       width: 300,
       alignItems: "center",
       shadowColor: "#000",
@@ -77,5 +80,10 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: "flex-end",
       alignItems: "center",
+   },
+   filmImg: {
+      height: 200,
+      width: 200,
+      borderRadius: 40,
    },
 });

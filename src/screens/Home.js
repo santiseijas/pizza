@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
 export default function Home({ navigation }) {
-  const counter = useSelector((state) => state);
+  const person = useSelector((state) => state);
   const dispatch = useDispatch();
 
   function onPress(persona) {

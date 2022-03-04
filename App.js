@@ -8,11 +8,14 @@ import { createStore } from "redux";
 import { personaReducer } from "./src/redux/reducer";
 import Master from "./src/screens/Master";
 import Detail from "./src/screens/Detail";
+import Header from "./src/components/Header";
+import Logout from "./src/components/Logout";
 
 const Stack = createNativeStackNavigator();
 const store = createStore(personaReducer);
 
 export default function App() {
+  console.disableYellowBox=true
   return (
     <Provider store={store}>
       <NavigationContainer>
@@ -20,22 +23,33 @@ export default function App() {
           <Stack.Screen
             name="Home"
             component={Home}
-            options={{ headerTitle: "" }}
+            options={{
+              headerTitle: (props) => <Header {...props} />,
+              headerShadowVisible: false,
+              headerBackTitleVisible: false,
+              headerBackVisible: false,
+            }}
           />
           <Stack.Screen
             name="Master"
             component={Master}
             options={{
-              headerTitle: "",
+              headerTitle: (props) => <Header {...props} />,
               headerShadowVisible: false,
               headerBackTitleVisible: false,
-              headerBackVisible: false
+              headerBackVisible: false,
+              headerRight: (props) => <Logout {...props} />,
             }}
           />
           <Stack.Screen
             name="Detail"
             component={Detail}
-            options={{ headerTitle: "" }}
+            options={{
+              headerTitle: (props) => <Header {...props} />,
+              headerShadowVisible: false,
+              headerBackTitleVisible: false,
+              headerRight: (props) => <Logout {...props} />,
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>
