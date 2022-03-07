@@ -1,9 +1,7 @@
-export const selectPersona = () => ({
-  type: "SELECT_PERSONA",
-  payload: persona,
-});
 
-export const selecItem = () => ({
-  type: "ADD_TO_CART",
-  payload: data,
-});
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import rootReducer from "../redux/reducers";
+export default initialState => {
+  return createStore(rootReducer, initialState, applyMiddleware(thunk));
+};

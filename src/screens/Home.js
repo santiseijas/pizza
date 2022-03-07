@@ -1,17 +1,35 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import Button from "../components/Button";
-import { useDispatch } from "react-redux";
+import { connect, useDispatch } from "react-redux";
+import { selectPersonType } from "../redux/actions/person";
 
-export default function Home({ navigation }) {
-  const dispatch = useDispatch();
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff",
+  },
+  button: {
+    backgroundColor: "grey",
+    margin: 20,
+    width: 200,
+    height: 40,
+    padding: 10,
+    borderRadius: 20,
+  },
+});
 
-  function onPress(persona) {
-    dispatch({
-      type: persona,
-    });
-    navigation.push("Master");
+function Home(props) {
+
+
+  function onPress(person) {
+    props.selectPerson(person)
+    props.navigation.push("Master");
   }
+
 
   return (
     <View style={styles.container}>
@@ -33,20 +51,21 @@ export default function Home({ navigation }) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignContent: "center",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-  },
-  button: {
-    backgroundColor: "grey",
-    margin: 20,
-    width: 200,
-    height: 40,
-    padding: 10,
-    borderRadius: 20,
-  },
-});
+
+const mapStateToProps = state => {
+  return {
+    person: state.person
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    selectPerson: type => dispatch(selectPersonType(type))
+    //selectPerson: type => dispatch(selectPersonType(type))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home);

@@ -1,19 +1,22 @@
 import * as React from "react";
-import { View, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./src/screens/Home";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
-import { reducer } from "./src/redux/reducer";
+import  createStore  from "./src/redux/store";
 import Master from "./src/screens/Master";
 import Detail from "./src/screens/Detail";
 import Header from "./src/components/Header";
 import Logout from "./src/components/Logout";
 import ConfirmationScreen from "./src/screens/ConfirmationScreen";
 
+const initialState = {
+  person: {},
+  cart: []
+};
+
 const Stack = createNativeStackNavigator();
-const store = createStore(reducer);
+const store = createStore(initialState)
 
 export default function App() {
   console.disableYellowBox=true
