@@ -1,8 +1,17 @@
-import React, { useState, useRef } from "react";
-import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
-import { useSelector } from "react-redux";
+import React, { useState, useRef, useContext } from "react";
+import {
+   View,
+   Text,
+   StyleSheet,
+   Image,
+   Dimensions,
+   FlatList,
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import Button from "../components/Button";
 import CustomModal from "../components/CustomModal";
+import { addToCart } from "../redux/store";
+import { ConfirmationContext } from "./ConfirmationScreen";
 
 const { width, height } = Dimensions.get("window");
 
@@ -14,7 +23,7 @@ const styles = StyleSheet.create({
    },
    pizzaImg: {
       height: 350,
-      width: width-30,
+      width: width - 30,
       borderRadius: 40,
    },
    content: {
@@ -65,12 +74,12 @@ const styles = StyleSheet.create({
    selectorAndPrice: {
       flexDirection: "row",
       justifyContent: "space-between",
-      alignItems:'center',
-      marginTop:20
+      alignItems: "center",
+      marginTop: 20,
    },
-   price:{
-      fontSize:40
-   }
+   price: {
+      fontSize: 40,
+   },
 });
 
 const Detail = (route) => {
@@ -80,21 +89,45 @@ const Detail = (route) => {
    const closeModal = () => setModalVisible(false);
    const activateModal = () => setModalVisible(true);
    const [amount, setAmount] = useState(1);
-   const [price, setPrice]= useState(0)
+   const [price, setPrice] = useState(0);
+   const [size, setSize] = useState();
+   const [index, setIndex] = useState();
+   const [unitaryPrice, setUnitaryPrice] = useState();
+   const dispatch = useDispatch();
 
-   const renderSizes = () => {
-      return data.prices.map((element) => {
-         return (
-            <View style={{ marginTop: 20 }}>
-               <Button
-                  name={element.size}
-                  style={[styles.buttonSize, {}]}
-                  styleText={{ color: "black", fontSize: 30 }}
-                  onPress={() =>setPrice(element.price) }
-               />
-            </View>
-         );
-      });
+   const selectColor = (item, colorSelected, colorUnselected) => {
+      let color = "";
+      index === item.index ? (color = colorSelected) : (color = colorUnselected);
+      return color;
+   };
+
+   const renderSizes = (data) => {
+      return (
+         <View
+            style={{
+               marginTop: 20,
+            }}
+         >
+            <Button
+               name={data.item.size}
+               style={[
+                  styles.buttonSize,
+                  { backgroundColor: selectColor(data, "black", "white") },
+               ]}
+               styleText={{
+                  color: selectColor(data, "white", "black"),
+                  fontSize: 30,
+               }}
+               onPress={() => {
+                  setUnitaryPrice(data.item.price);
+                  setPrice(data.item.price);
+                  setSize(data.item.size);
+                  setIndex(data.index);
+                  setAmount(1);
+               }}
+            />
+         </View>
+      );
    };
 
    return (
@@ -114,6 +147,7 @@ const Detail = (route) => {
                   onPress={() => {
                      if (amount === 0) return;
                      setAmount(amount - 1);
+                     setPrice(unitaryPrice * (amount - 1));
                   }}
                />
                <Text style={styles.quantity}>{amount}</Text>
@@ -121,15 +155,23 @@ const Detail = (route) => {
                   name={"+"}
                   style={[styles.buttonSelector, {}]}
                   styleText={{ color: "black", fontSize: 40 }}
-                  onPress={() => setAmount(amount + 1)}
+                  onPress={() => {
+                     setAmount(amount + 1);
+                     setPrice(unitaryPrice * (amount + 1));
+                  }}
                />
             </View>
-            <Text style={styles.price}>{price+'$'}</Text>
+            <Text style={styles.price}>{price.toFixed(2) + "$"}</Text>
          </View>
          <View style={{}}>
             <Text style={styles.content}>{data.content}</Text>
-            <View style={{ flexDirection: "row", justifyContent: "space-around" }}>
-               {renderSizes()}
+            <View style={{}}>
+               <FlatList
+                  data={data.prices}
+                  renderItem={(data) => renderSizes(data)}
+                  ItemSeparatorComponent={() => <View style={{ width: 16 }} />}
+                  horizontal={true}
+               />
             </View>
          </View>
          <View style={styles.bottom}>
@@ -137,7 +179,19 @@ const Detail = (route) => {
                name={"Buy"}
                style={styles.button}
                styleText={{ color: "black", fontSize: 20 }}
-               onPress={() => activateModal()}
+               onPress={() => {
+                  if (person.type !== "Married") {
+                     dispatch({
+                        type: "ADD_TO_CART",
+                        id: data.id,
+                        amount: amount,
+                        size: size,
+                     });
+                     route.navigation.push("Confirmation");
+                  } else {
+                     activateModal();
+                  }
+               }}
             />
          </View>
          {person.type === "Married" && modalVisible ? (

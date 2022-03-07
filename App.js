@@ -5,14 +5,15 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./src/screens/Home";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
-import { personaReducer } from "./src/redux/reducer";
+import { reducer } from "./src/redux/reducer";
 import Master from "./src/screens/Master";
 import Detail from "./src/screens/Detail";
 import Header from "./src/components/Header";
 import Logout from "./src/components/Logout";
+import ConfirmationScreen from "./src/screens/ConfirmationScreen";
 
 const Stack = createNativeStackNavigator();
-const store = createStore(personaReducer);
+const store = createStore(reducer);
 
 export default function App() {
   console.disableYellowBox=true
@@ -44,6 +45,16 @@ export default function App() {
           <Stack.Screen
             name="Detail"
             component={Detail}
+            options={{
+              headerTitle: (props) => <Header {...props} />,
+              headerShadowVisible: false,
+              headerBackTitleVisible: false,
+              headerRight: (props) => <Logout {...props} />,
+            }}
+          />
+           <Stack.Screen
+            name="Confirmation"
+            component={ConfirmationScreen}
             options={{
               headerTitle: (props) => <Header {...props} />,
               headerShadowVisible: false,

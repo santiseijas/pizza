@@ -1,14 +1,9 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Button from "../components/Button";
-import { bindActionCreators } from "redux";
-import { connect } from "react-redux";
-import { selectPersona } from "../redux/store";
-import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
 export default function Home({ navigation }) {
-  const person = useSelector((state) => state);
   const dispatch = useDispatch();
 
   function onPress(persona) {

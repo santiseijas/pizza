@@ -4,21 +4,29 @@ export const SELECT_PERSONA = "SELECT_PERSONA";
 
 const INITIAL_STATE = {
   current: [],
-  possible: [
+  possiblePerson: [
     'Single',
     'Married',
   ],
+  cart:{}
 };
-export const personaReducer = (state = {type: ''}, action) => {
+export const reducer = (state = INITIAL_STATE, action) => {
+  console.log(action)
   switch (action.type) {
-  
      case 'Married':
       return {type:'Married'}
       case 'Single':
         return {type:'Single'}
+        case 'ADD_TO_CART':    
+        console.log('state',action)
+        return { 
+       
+          cart:[action]
+     }
+
     default:
       return state;
   }
 };
 
-export default personaReducer
+export default reducer
