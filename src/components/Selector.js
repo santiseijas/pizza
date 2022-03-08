@@ -3,8 +3,6 @@ import { StyleSheet, Text, View } from "react-native";
 import Button from "./Button";
 
 const Selector = (props) => {
-  console.log(props);
-
   return (
     <View style={styles.selector}>
       <Button

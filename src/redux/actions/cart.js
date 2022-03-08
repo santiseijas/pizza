@@ -15,3 +15,10 @@ export const removeProductFromCart = index => {
     index
   };
 };
+
+export const addFilmToCart = data => {
+  return {
+    type: actionTypes.ADD_FILM,
+    data
+  };
+};

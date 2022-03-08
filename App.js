@@ -12,7 +12,8 @@ import ConfirmationScreen from "./src/screens/ConfirmationScreen";
 
 const initialState = {
   person: {},
-  cart: []
+  cart: [],
+  film:false
 };
 
 const Stack = createNativeStackNavigator();

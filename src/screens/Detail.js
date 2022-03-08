@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { connect, useDispatch, useSelector } from "react-redux";
 import Button from "../components/Button";
-import CustomModal from "../components/CustomModal";
 import Selector from "../components/Selector";
 import { addProductToCart } from "../redux/actions/cart";
 import { addToCart } from "../redux/store";
@@ -35,17 +34,17 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "gainsboro",
-    width: width /3,
+    width: width - 30,
     height: 60,
     borderRadius: 40,
+    paddingHorizontal: 15,
     bottom: 0,
   },
   bottom: {
     flex: 1,
     justifyContent: "center",
-    marginBottom: 20,
     alignItems: "center",
-    flexDirection:'row'
+    flexDirection: "row",
   },
 
   buttonSize: {
@@ -68,9 +67,7 @@ const styles = StyleSheet.create({
 const Detail = (props) => {
   const data = props.route.params;
   const person = useSelector((state) => state);
-  const [modalVisible, setModalVisible] = useState(false);
-  const closeModal = () => setModalVisible(false);
-  const activateModal = () => setModalVisible(true);
+
   const [quantity, setQuantity] = useState(1);
   const [price, setPrice] = useState(0);
   const [size, setSize] = useState();
@@ -133,14 +130,13 @@ const Detail = (props) => {
             if (quantity === 0) return;
             setQuantity(quantity - 1);
             setPrice(unitaryPrice * (quantity - 1));
-           
           }}
         />
         <Text style={styles.price}>{price.toFixed(2) + "$"}</Text>
       </View>
       <View style={{}}>
         <Text style={styles.content}>{data.content}</Text>
-        <View style={{}}>
+        <View>
           <FlatList
             data={data.prices}
             renderItem={(data) => renderSizes(data)}
@@ -151,33 +147,16 @@ const Detail = (props) => {
       </View>
       <View style={styles.bottom}>
         <Button
-          name={"Buy"}
-          style={styles.button}
-          styleText={{ color: "black", fontSize: 20 }}
-          onPress={() => {
-            if (person.type !== "Married") {
-              props.addProduct(data, quantity, size);
-              props.navigation.push("Confirmation");
-            } else {
-              activateModal();
-            }
-          }}
-        />
-         <Button
           name={"Add"}
           style={styles.button}
           styleText={{ color: "black", fontSize: 20 }}
           onPress={() => {
             props.addProduct(data, quantity, size);
 
-            props.navigation.pop();
-
+            props.navigation.push("Master");
           }}
         />
       </View>
-      {person.type === "Married" && modalVisible ? (
-        <CustomModal closeModal={closeModal} display={modalVisible} />
-      ) : null}
     </View>
   );
 };

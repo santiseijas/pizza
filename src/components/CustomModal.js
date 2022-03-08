@@ -11,7 +11,7 @@ const CustomModal = (props) => {
             animationType="slide"
             transparent={true}
             visible={props.visible}
-            onPress={props.closeModal}
+           
          >
             <View style={styles.centeredView}>
                <View style={styles.modalView}>
@@ -24,9 +24,15 @@ const CustomModal = (props) => {
                   <View style={styles.bottom}>
                      <Button
                         name={"Add"}
-                        style={styles.buttonModal}
+                        style={[styles.buttonModal, {backgroundColor:'green'}]}
                         styleText={{ color: "white", fontSize: 20 }}
-                        onPress={props.closeModal}
+                        onPress={props.onAddPress}
+                     />
+                      <Button
+                        name={"Not Today"}
+                        style={[styles.buttonModal, {backgroundColor:'red'}]}
+                        styleText={{ color: "white", fontSize: 20 }}
+                        onPress={props.onNotAddPress}
                      />
                   </View>
                </View>
@@ -66,8 +72,7 @@ const styles = StyleSheet.create({
       padding: 10,
       elevation: 2,
       height: 50,
-      width: 100,
-      backgroundColor: "black",
+      width: 120,
       justifyContent: "flex-end",
       alignItems: "center",
    },
@@ -79,7 +84,9 @@ const styles = StyleSheet.create({
    bottom: {
       flex: 1,
       justifyContent: "flex-end",
-      alignItems: "center",
+      alignItems: 'stretch',
+      flexDirection:'row',
+      
    },
    filmImg: {
       height: 200,
