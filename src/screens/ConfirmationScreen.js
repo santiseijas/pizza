@@ -43,7 +43,25 @@ const styles = StyleSheet.create({
 });
 
 const ConfirmationScreen = (props) => {
-  console.log(props);
+  const [filmAdded, setFilmAdded] = useState(0)
+  let totalPrices=[]
+
+  const calculateTotal=()=>{
+    let totalPrice
+    if(totalPrices.length>0){
+      //totalPrice=totalPrices.reduce((a, b) => a + b, 0)
+      totalPrice = totalPrices.reduce(
+        (previousValue, currentValue) => previousValue + currentValue,
+        0
+      );
+
+    }else{
+      totalPrice=totalPrices[0]
+    }
+//    console.log(totalPrices);
+    return totalPrice
+  }
+
 
   return (
     <View style={styles.container}>
@@ -68,6 +86,7 @@ const ConfirmationScreen = (props) => {
           );
         }
         const a = element.product.prices.find((e) => e.size === element.size);
+       totalPrices.push(a.price * element.quantity)
         return (
           <View style={styles.item}>
             <Image
@@ -82,11 +101,13 @@ const ConfirmationScreen = (props) => {
               <Text style={styles.priceText}>
                 {a.price * element.quantity}$
               </Text>
+              
               <Button></Button>
             </View>
           </View>
         );
       })}
+      <View><Text>{calculateTotal()}</Text></View>
     </View>
   );
 };

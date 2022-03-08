@@ -13,7 +13,7 @@ export default (state = [], action) => {
       return state.map(p => {
         console.log('p',p)
         console.log('action',action.product)
-        if (p.product.id === action.id) {
+        if (p.product.id === action.product.id) {
           // console.log('entra3111');
           return updateQuantity(p);
         }
