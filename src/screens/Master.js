@@ -12,7 +12,8 @@ import { connect } from "react-redux";
 import Button from "../components/Button";
 import { data } from "../data/data";
 import CustomModal from "../components/CustomModal";
-import { addFilmToCart, addProductToCart } from "../redux/actions/cart";
+import { addProductToCart } from "../redux/actions/cart";
+import { addFilmToCart } from "../redux/actions/film";
 
 const { width, height } = Dimensions.get("window");
 
@@ -34,13 +35,12 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 40,
     paddingHorizontal: 15,
-    bottom: 0,
+    bottom: 50,
   },
   bottom: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "row",
   },
 });
 function Master(props) {
@@ -49,7 +49,6 @@ function Master(props) {
   const activateModal = () => setModalVisible(true);
   const filmAdded= props.cart.find(element=>element.film===true)
 
-  console.log(!filmAdded);
   const onAddPress = () => {
     props.addFilm();
     closeModal()
@@ -73,7 +72,7 @@ function Master(props) {
   };
 
   return (
-    <View style={{ backgroundColor: "#fff", height: height, flex: 1 }}>
+    <View style={{ backgroundColor: "#fff", height: height, }}>
       <FlatList
         data={data}
         renderItem={renderPizza}
@@ -81,24 +80,21 @@ function Master(props) {
         keyExtractor={data.id}
       />
       <View style={styles.bottom}>
+        {console.log(props.cart)}
         {props.cart.length > 0 && (
           <Button
             name={"Buy"}
             style={styles.button}
             styleText={{ color: "black", fontSize: 20 }}
             onPress={() => {
-              if (props.person.type ==! "Married") {
+              if (props.person.type === "Single") {
                 props.navigation.push("Confirmation");
               } else {
                 if(!filmAdded){
                   activateModal();
-
-                
                 }else{
                   props.navigation.push("Confirmation");
-
                 }
-               
               }
             }}
           />

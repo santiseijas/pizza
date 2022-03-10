@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 });
 
 function Home(props) {
-
+console.log(props);
 
   function onPress(person) {
     props.selectPerson(person)
@@ -33,6 +33,7 @@ function Home(props) {
 
   return (
     <View style={styles.container}>
+      {    console.log(props)}
       <Button
         name={"single"}
         onPress={() => {

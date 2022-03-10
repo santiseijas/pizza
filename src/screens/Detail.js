@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -11,8 +11,6 @@ import { connect, useDispatch, useSelector } from "react-redux";
 import Button from "../components/Button";
 import Selector from "../components/Selector";
 import { addProductToCart } from "../redux/actions/cart";
-import { addToCart } from "../redux/store";
-import { ConfirmationContext } from "./ConfirmationScreen";
 
 const { width, height } = Dimensions.get("window");
 
@@ -38,15 +36,12 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 40,
     paddingHorizontal: 15,
-    bottom: 0,
+    bottom: 50,
   },
-  bottom: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    flexDirection: "row",
+  discount: {
+    color: "red",
+    fontSize: 20
   },
-
   buttonSize: {
     minWidth: 60,
     borderColor: "gainsboro",
@@ -62,19 +57,21 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 40,
   },
+  bottom: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 const Detail = (props) => {
   const data = props.route.params;
-  const person = useSelector((state) => state);
 
   const [quantity, setQuantity] = useState(1);
   const [price, setPrice] = useState(0);
   const [size, setSize] = useState();
   const [index, setIndex] = useState();
   const [unitaryPrice, setUnitaryPrice] = useState();
-  const dispatch = useDispatch();
-  const selectorFunc = useRef();
 
   const selectColor = (item, colorSelected, colorUnselected) => {
     let color = "";
@@ -112,7 +109,9 @@ const Detail = (props) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "white", paddingHorizontal: 15 }}>
+    <View
+      style={{ backgroundColor: "#fff", height: height, paddingHorizontal: 15 }}
+    >
       <View
         style={{ alignItems: "center", marginTop: 10, marginHorizontal: 10 }}
       >
@@ -143,6 +142,11 @@ const Detail = (props) => {
             ItemSeparatorComponent={() => <View style={{ width: 16 }} />}
             horizontal={true}
           />
+        </View>
+        <View style={{ marginTop: 30 }}>
+          <Text style={styles.discount}>
+            If you add 2 pizzas of same size, you will get 30% descount
+          </Text>
         </View>
       </View>
       <View style={styles.bottom}>
