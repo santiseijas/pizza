@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   Dimensions,
   FlatList,
 } from "react-native";
-import { connect, useDispatch, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import Button from "../components/Button";
 import Selector from "../components/Selector";
 import { addProductToCart } from "../redux/actions/cart";
@@ -21,14 +21,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   pizzaImg: {
-    height: 350,
+    height: 300,
     width: width - 30,
     borderRadius: 40,
   },
   content: {
     fontSize: 20,
     marginTop: 20,
-    color: "dimgrey",
+    color: "black",
   },
   button: {
     backgroundColor: "gainsboro",
@@ -36,11 +36,15 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 40,
     paddingHorizontal: 15,
-    bottom: 50,
+    bottom: 20,
   },
   discount: {
     color: "red",
-    fontSize: 20
+    fontSize: 20,
+  },
+  advertisment: {
+    color: "dodgerblue",
+    fontSize: 20,
   },
   buttonSize: {
     minWidth: 60,
@@ -68,15 +72,41 @@ const Detail = (props) => {
   const data = props.route.params;
 
   const [quantity, setQuantity] = useState(1);
-  const [price, setPrice] = useState(0);
+  const [price, setPrice] = useState();
   const [size, setSize] = useState();
   const [index, setIndex] = useState();
   const [unitaryPrice, setUnitaryPrice] = useState();
 
   const selectColor = (item, colorSelected, colorUnselected) => {
     let color = "";
-    index === item.index ? (color = colorSelected) : (color = colorUnselected);
-    return color;
+    if (index !== item.index) {
+      if (props.person.type === "Single") {
+        if (item.item.size === "M" || item.item.size === "L") {
+          return "dodgerblue";
+        } else {
+          return colorUnselected;
+        }
+      } else {
+        if (item.item.size === "L" || item.item.size === "XL") {
+          return "dodgerblue";
+        } else {
+          return colorUnselected;
+        }
+      }
+    } else {
+      return colorSelected;
+    }
+  };
+
+  const selectTextColor = (buttonColor) => {
+    switch (buttonColor) {
+      case "white":
+        return "black";
+      case "dodgerblue":
+        return "white";
+      default:
+        return "white";
+    }
   };
 
   const renderSizes = (data) => {
@@ -90,10 +120,19 @@ const Detail = (props) => {
           name={data.item.size}
           style={[
             styles.buttonSize,
-            { backgroundColor: selectColor(data, "black", "white") },
+            {
+              backgroundColor: selectColor(
+                data,
+                "black",
+                "white",
+                data.item.size
+              ),
+            },
           ]}
           styleText={{
-            color: selectColor(data, "white", "black"),
+            color: selectTextColor(
+              selectColor(data, "black", "white", data.item.size)
+            ),
             fontSize: 30,
           }}
           onPress={() => {
@@ -131,7 +170,9 @@ const Detail = (props) => {
             setPrice(unitaryPrice * (quantity - 1));
           }}
         />
-        <Text style={styles.price}>{price.toFixed(2) + "$"}</Text>
+        {!isNaN(price) && (
+          <Text style={styles.price}>{price.toFixed(2) + "$"}</Text>
+        )}
       </View>
       <View style={{}}>
         <Text style={styles.content}>{data.content}</Text>
@@ -143,23 +184,29 @@ const Detail = (props) => {
             horizontal={true}
           />
         </View>
-        <View style={{ marginTop: 30 }}>
+        <View style={{ marginTop: 20 }}>
+          <Text style={styles.advertisment}>
+            {props.person.type === "Single"
+              ? "Best sizes for single are M and L"
+              : "Best sizes for married are L and XL"}
+          </Text>
           <Text style={styles.discount}>
             If you add 2 pizzas of same size, you will get 30% descount
           </Text>
         </View>
       </View>
       <View style={styles.bottom}>
-        <Button
-          name={"Add"}
-          style={styles.button}
-          styleText={{ color: "black", fontSize: 20 }}
-          onPress={() => {
-            props.addProduct(data, quantity, size);
-
-            props.navigation.push("Master");
-          }}
-        />
+        {size && (
+          <Button
+            name={"ADD"}
+            style={styles.button}
+            styleText={{ color: "black", fontSize: 20 }}
+            onPress={() => {
+              props.addProduct(data, quantity, size);
+              props.navigation.push("Master");
+            }}
+          />
+        )}
       </View>
     </View>
   );

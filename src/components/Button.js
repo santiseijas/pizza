@@ -17,6 +17,6 @@ export default function Button(props) {
 const styles = StyleSheet.create({
   button: {
     alignItems: "center",
-    justifyContent:'center'
+    justifyContent: "center",
   },
 });

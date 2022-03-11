@@ -1,11 +1,11 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
-import Logo from '../../img/logo.png'
+import { Image, StyleSheet, View } from "react-native";
+import Logo from "../../img/logo.png";
 
 const Header = () => {
   return (
     <View>
-      <Image source={ Logo } style={styles.pizzaImg} />
+      <Image source={Logo} style={styles.pizzaImg} />
     </View>
   );
 };
@@ -13,9 +13,8 @@ const Header = () => {
 export default Header;
 
 const styles = StyleSheet.create({
-
-   pizzaImg: {
-      height: 50,
-      width: 100,
-   },
+  pizzaImg: {
+    height: 50,
+    width: 100,
+  },
 });

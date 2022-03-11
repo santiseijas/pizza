@@ -4,5 +4,4 @@ export const actionTypes = {
    SELECT_PERSON: "SELECT_PERSON",
    ADD_FILM: "ADD_FILM",
    LOG_OUT: "LOG_OUT",
-
 };

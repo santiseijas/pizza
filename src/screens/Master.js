@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -47,20 +47,24 @@ function Master(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const closeModal = () => setModalVisible(false);
   const activateModal = () => setModalVisible(true);
-  const filmAdded= props.cart.find(element=>element.film===true)
+  let filmAdded;
+
+  if (props.cart && props.cart.length > 1) {
+    filmAdded = props.cart?.find((element) => element.film === true);
+  }
 
   const onAddPress = () => {
-    props.addFilm();
-    closeModal()
+    props.addFilm(true);
+    closeModal();
     props.navigation.push("Confirmation");
   };
 
-  const onNotAddPress =()=>{
-    closeModal()
+  const onNotAddPress = () => {
+    closeModal();
     props.navigation.push("Confirmation");
-  }
+  };
 
-  const renderPizza = ({ item, index }) => {
+  const renderPizza = ({ item }) => {
     return (
       <View style={styles.itemView}>
         <TouchableOpacity onPress={() => props.navigation.push("Detail", item)}>
@@ -72,7 +76,7 @@ function Master(props) {
   };
 
   return (
-    <View style={{ backgroundColor: "#fff", height: height, }}>
+    <View style={{ backgroundColor: "#fff", height: height }}>
       <FlatList
         data={data}
         renderItem={renderPizza}
@@ -80,19 +84,18 @@ function Master(props) {
         keyExtractor={data.id}
       />
       <View style={styles.bottom}>
-        {console.log(props.cart)}
         {props.cart.length > 0 && (
           <Button
-            name={"Buy"}
+            name={"BUY"}
             style={styles.button}
             styleText={{ color: "black", fontSize: 20 }}
             onPress={() => {
               if (props.person.type === "Single") {
                 props.navigation.push("Confirmation");
               } else {
-                if(!filmAdded){
+                if (!filmAdded) {
                   activateModal();
-                }else{
+                } else {
                   props.navigation.push("Confirmation");
                 }
               }
@@ -101,7 +104,11 @@ function Master(props) {
         )}
       </View>
       {props.person.type === "Married" && modalVisible ? (
-        <CustomModal onAddPress={onAddPress} display={modalVisible}onNotAddPress={onNotAddPress} />
+        <CustomModal
+          onAddPress={onAddPress}
+          display={modalVisible}
+          onNotAddPress={onNotAddPress}
+        />
       ) : null}
     </View>
   );
@@ -111,7 +118,6 @@ const mapStateToProps = (state) => {
   return {
     cart: state.cart,
     person: state.person,
-
   };
 };
 
@@ -119,7 +125,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addProduct: (product, quantity, size) =>
       dispatch(addProductToCart(product, quantity, size)),
-    addFilm: () => dispatch(addFilmToCart(true)),
+    addFilm: (value) => dispatch(addFilmToCart(value)),
   };
 };
 

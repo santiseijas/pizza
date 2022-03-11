@@ -1,9 +1,10 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
-import { connect, useDispatch, useSelector } from "react-redux";
-import data from "../data/data";
+import { connect } from "react-redux";
 import Button from "../components/Button";
 import { removeProductFromCart } from "../redux/actions/cart";
+import { useNavigation } from "@react-navigation/native";
+import { logOut } from "../redux/actions/person";
 
 const { width, height } = Dimensions.get("window");
 
@@ -60,23 +61,28 @@ const styles = StyleSheet.create({
 });
 
 const ConfirmationScreen = (props) => {
-  const [filmAdded, setFilmAdded] = useState(0);
+  const [] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
+  const navigation = useNavigation();
+
   let totalPrices = [];
   useEffect(() => {
     setTotalPrice(calculateTotal());
   });
 
   const calculateTotal = () => {
-    const film = props.cart.find((element) => element.film);
-    let totalPrice;
+    let totalPrice = 0;
     if (totalPrices.length > 0) {
       totalPrice = totalPrices.reduce((a, b) => a + b, 0);
     } else {
       totalPrice = totalPrices[0];
     }
-    if (film) {
-      return totalPrice + 20;
+    if (props.film === true) {
+      if (totalPrice) {
+        return totalPrice + 20;
+      } else {
+        return 20;
+      }
     } else {
       return totalPrice;
     }
@@ -85,6 +91,7 @@ const ConfirmationScreen = (props) => {
   const renderPizza = (pizza) => {
     const price = pizza.product.prices.find((p) => p.size === pizza.size);
     totalPrices.push(price.price * pizza.quantity);
+
     return (
       <View style={styles.item}>
         <Image
@@ -95,15 +102,22 @@ const ConfirmationScreen = (props) => {
           <Text>{pizza.product.name}</Text>
           <Text>quantity:{pizza.quantity}</Text>
           <Text>size:{pizza.size}</Text>
+          <Button
+            name={"X"}
+            style={{ height: 25, width: 20, backgroundColor: "red" }}
+            styleText={{
+              color: "white",
+              fontSize: 20,
+              fontWeight: "900",
+              justifyContent: "center",
+            }}
+            onPress={() => {
+              props.removeProductFromCart(pizza);
+            }}
+          ></Button>
         </View>
         <View style={styles.price}>
           <Text style={styles.priceText}>{price.price * pizza.quantity}$</Text>
-          <Button style={{height:20,width:20,backgroundColor:'red'}} onPress={() => {
-            props.removeProductFromCart(pizza);
-
-          }}>
-
-          </Button>
         </View>
       </View>
     );
@@ -131,7 +145,7 @@ const ConfirmationScreen = (props) => {
   return (
     <View style={styles.screen}>
       <View style={styles.container}>
-        {props.film && renderFilm()}
+        {props.film && props.film === true && renderFilm()}
         {props?.cart?.map((element) => (
           <View>
             {element.length > 1
@@ -144,11 +158,27 @@ const ConfirmationScreen = (props) => {
         <View></View>
       </View>
       <View style={styles.bottom}>
-        <Button
-          name={"PAY" + " " + totalPrice + "$"}
-          style={styles.button}
-          styleText={{ color: "black", fontSize: 20 }}
-        />
+        {props.cart.length > 0 || props.film === true ? (
+          <Button
+            name={"PAY" + " " + totalPrice + "$"}
+            style={styles.button}
+            styleText={{ color: "black", fontSize: 20 }}
+            onPress={() => {
+              props.logOut();
+              navigation.reset({
+                index: 1,
+                routes: [{ name: "Home" }],
+              });
+            }}
+          />
+        ) : (
+          <Button
+            name={"Back to select order"}
+            style={styles.button}
+            styleText={{ color: "black", fontSize: 20 }}
+            onPress={() => props.navigation.pop()}
+          />
+        )}
       </View>
     </View>
   );
@@ -166,10 +196,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     addProduct: (product, quantity, size) =>
       dispatch(addProductToCart(product, quantity, size)),
-      removeProductFromCart:(product)=>dispatch(removeProductFromCart(product))
-
+    removeProductFromCart: (product) =>
+      dispatch(removeProductFromCart(product)),
+    logOut: () => dispatch(logOut(null)),
   };
-
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfirmationScreen);

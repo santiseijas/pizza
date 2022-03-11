@@ -1,9 +1,9 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import Button from "./Button";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
-import { logOut, selectPersonType } from "../redux/actions/person";
+import { logOut } from "../redux/actions/person";
 
 const styles = StyleSheet.create({
   button: {
@@ -19,14 +19,11 @@ const Logout = (props) => {
   const navigation = useNavigation();
 
   const onLogout = () => {
-    props.logOut()
+    props.logOut();
     navigation.reset({
       index: 1,
-      routes: [
-       
-        { name: 'Home' },
-      ],
-    })
+      routes: [{ name: "Home" }],
+    });
   };
   return (
     <View>
@@ -41,16 +38,13 @@ const Logout = (props) => {
   );
 };
 
-const mapStateToProps = state => {
-   return {
-     person: state.person
-   };
- };
-const mapDispatchToProps = dispatch => {
-   return {
-    selectPerson: (type) => dispatch(selectPersonType(type)),
-    logOut:()=>dispatch(logOut())
+const mapStateToProps = () => {
+  return {};
+};
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logOut: () => dispatch(logOut(null)),
   };
 };
 
-export default connect(mapStateToProps,mapDispatchToProps)(Logout);
+export default connect(mapStateToProps, mapDispatchToProps)(Logout);

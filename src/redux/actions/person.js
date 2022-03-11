@@ -1,5 +1,4 @@
 import { actionTypes } from "./actionsTypes"
-import intialState from '../../../App'
 
 export const selectPersonType = person => {
    return {
@@ -8,9 +7,9 @@ export const selectPersonType = person => {
    }
 }
 
-export const logOut = () => {
+export const logOut = (state = null) => {
    return {
       type: actionTypes.LOG_OUT,
-      intialState
+      state
    }
 }

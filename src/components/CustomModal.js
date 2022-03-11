@@ -3,34 +3,33 @@ import { StyleSheet, Text, View, Modal, Image } from "react-native";
 import Button from "./Button";
 
 const CustomModal = (props) => {
-
-
    return props.display ? (
       <View>
-         <Modal
-            animationType="slide"
-            transparent={true}
-            visible={props.visible}
-           
-         >
+         <Modal animationType="slide" transparent={true} visible={props.visible}>
             <View style={styles.centeredView}>
                <View style={styles.modalView}>
                   <Text style={styles.textStyle}>
                      Do you want to see one film tonight?
             </Text>
                   <View>
-                     <Image source={{ uri: 'https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_FMjpg_UY720_.jpg' }} style={styles.filmImg} />
+                     <Image
+                        source={{
+                           uri:
+                              "https://m.media-amazon.com/images/M/MV5BMDdmMTBiNTYtMDIzNi00NGVlLWIzMDYtZTk3MTQ3NGQxZGEwXkEyXkFqcGdeQXVyMzMwOTU5MDk@._V1_FMjpg_UY720_.jpg",
+                        }}
+                        style={styles.filmImg}
+                     />
                   </View>
                   <View style={styles.bottom}>
                      <Button
-                        name={"Add"}
-                        style={[styles.buttonModal, {backgroundColor:'green'}]}
+                        name={"ADD"}
+                        style={[styles.buttonModal, { backgroundColor: "green" }]}
                         styleText={{ color: "white", fontSize: 20 }}
                         onPress={props.onAddPress}
                      />
-                      <Button
+                     <Button
                         name={"Not Today"}
-                        style={[styles.buttonModal, {backgroundColor:'red'}]}
+                        style={[styles.buttonModal, { backgroundColor: "red" }]}
                         styleText={{ color: "white", fontSize: 20 }}
                         onPress={props.onNotAddPress}
                      />
@@ -84,9 +83,8 @@ const styles = StyleSheet.create({
    bottom: {
       flex: 1,
       justifyContent: "flex-end",
-      alignItems: 'stretch',
-      flexDirection:'row',
-      
+      alignItems: "stretch",
+      flexDirection: "row",
    },
    filmImg: {
       height: 200,

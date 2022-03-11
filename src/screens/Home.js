@@ -1,8 +1,10 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import Button from "../components/Button";
-import { connect, useDispatch } from "react-redux";
+import { connect } from "react-redux";
 import { selectPersonType } from "../redux/actions/person";
+
+const { width } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
@@ -13,36 +15,34 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   button: {
-    backgroundColor: "grey",
-    margin: 20,
-    width: 200,
-    height: 40,
-    padding: 10,
-    borderRadius: 20,
+    backgroundColor: "gainsboro",
+    width: width - 30,
+    height: 60,
+    borderRadius: 40,
+    paddingHorizontal: 15,
+    marginBottom: 20,
   },
 });
 
 function Home(props) {
-console.log(props);
-
   function onPress(person) {
-    props.selectPerson(person)
+    props.selectPerson(person);
     props.navigation.push("Master");
   }
 
-
   return (
     <View style={styles.container}>
-      {    console.log(props)}
       <Button
-        name={"single"}
+        name={"SINGLE"}
+        styleText={{ color: "black", fontSize: 20 }}
         onPress={() => {
           onPress("Single");
         }}
         style={styles.button}
       />
       <Button
-        name={"married"}
+        name={"MARRIED"}
+        styleText={{ color: "black", fontSize: 20 }}
         onPress={() => {
           onPress("Married");
         }}
@@ -52,21 +52,16 @@ console.log(props);
   );
 }
 
-
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    person: state.person
+    person: state.person,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    selectPerson: type => dispatch(selectPersonType(type))
-    //selectPerson: type => dispatch(selectPersonType(type))
+    selectPerson: (type) => dispatch(selectPersonType(type)),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
